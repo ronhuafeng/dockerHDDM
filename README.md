@@ -1,10 +1,10 @@
 # Create a docker image for HDDM 0.8.0
 
 ### What is HDDM? 
-See [here](http://ski.clps.brown.edu/hddm_docs/index.html)
+HDDM is a python package for hierarchical drift diffusion modelling, see [here](http://ski.clps.brown.edu/hddm_docs/index.html) for more.
 
 ### Why I build this docker image?
-There was a very nice [HDDM docker image](https://registry.hub.docker.com/r/madslupe/hddm) by Mads. However, this docker image didn't include `ipyparallel`, a package enable us to run multiple chains in **parallel**. Since in most modern Baysian packages, running multiple chains to check the convergence is the normal, I think it's important to adopt this practice for HDDM too. So far, using `ipyparallel` is the only way I knew, so I tried to include this package also in docker image.
+There was a very nice [HDDM docker image](https://registry.hub.docker.com/r/madslupe/hddm) by Mads. However, this docker image doesn't include `ipyparallel`, a package enable us to run multiple chains in **parallel**. However, running multiple chains to check the convergence is part of Bayesian modelling, it's important to make this easier for HDDM too. So far, using `ipyparallel` is the only way I knew, so I tried to include this package also in docker image.
 
 ### How this docker image was built
 
@@ -20,7 +20,6 @@ Code for building the docker image (don't forget the `.` in the end):
 
 ```
 docker build -t hcp4715/hddm:0.8.0 -f Dockerfile .
-
 ```
 ### How to use this docker image
 
@@ -32,11 +31,17 @@ docker run -it --rm --cpus=5 \
 -p 8888:8888 hcp4715/hddm:test jupyter notebook
 ```
 `docker run` -- run a docker image in a container
+
 `-it` -- 
+
 `-v` -- mount a folder to the container
+
 `/home/hcp4715/Results/Data_Analysis/HDDM` is the directory where I stored my data. 
+
 `-p` -- port
+
 `hcp4715/hddm:test` -- the docker image to run
+
 `jupyter notebook` -- open juypter notebook when start running the container.
 
 After running the code above, bash will has output like this:
@@ -59,3 +64,8 @@ Note that before diving into the jupyter notebook and start analysis, don't forg
 ![screenshot for ipython clusters](pic/icluster.png)
 
 The number of engines started should be less than or equals to the number of cores of your machine. Later, when run parallel processing, the number of the engines should be less or equals to the number of engines you started here.
+
+### Acknowledgement
+Thanks @madslupe for his version of HDDM image.
+
+Thanks Dr Rui Yuan for his help in making the Dockerfile.
