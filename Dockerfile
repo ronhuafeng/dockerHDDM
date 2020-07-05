@@ -1,6 +1,8 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
-ARG BASE_CONTAINER=jupyter/minimal-notebook
+
+# The buid from the base of minimal-notebook, based on python 3.7.6 (54462805efcb)
+ARG BASE_CONTAINER=jupyter/minimal-notebook:54462805efcb
 FROM $BASE_CONTAINER
 
 LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"

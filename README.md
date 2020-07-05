@@ -4,45 +4,43 @@
 HDDM is a python package for hierarchical drift diffusion modelling, see [here](http://ski.clps.brown.edu/hddm_docs/index.html) for more.
 
 ### Why I build this docker image?
-There was a very nice [HDDM docker image](https://registry.hub.docker.com/r/madslupe/hddm) by Mads. However, this docker image doesn't include `ipyparallel`, a package enable us to run multiple chains in **parallel**. However, running multiple chains to check the convergence is part of Bayesian modelling, it's important to make this easier for HDDM too. So far, using `ipyparallel` is the only way I knew, so I tried to include this package also in docker image.
+There was a very nice [HDDM docker image](https://registry.hub.docker.com/r/madslupe/hddm) by Mads (@madslupe). However, this docker image doesn't include `ipyparallel`, a package we need to run multiple chains in **parallel**. Given that running multiple chains to check the convergence is part of Bayesian routine now, it's important to make it easier for running HDDM too. 
 
-### How this docker image was built
-
-I built this docker image under Ubuntu 20.04. 
+### How to use this docker image
 
 First, install docker and test it. There are many tutorial on this, here is one on [docker's website](https://docs.docker.com/engine/install/ubuntu/).
 
-Second, build the docker image from `Dockerfile`.
-
-This Dockerfile is modified by Dr. Rui Yuan @ Stanford from [jupyter/scipy-notebook](https://hub.docker.com/r/jupyter/scipy-notebook/dockerfile). We installed additional packages for HDDM and `ipyparallel`, and configured the `ipyparallel` so that we can run it in jupyter noebook (doesn't work for jupyterlab yet). See `Dockerfile` for the details
-
-Code for building the docker image (don't forget the `.` in the end):
+Then, an easy way to use this image is to pull it from docker hub:
 
 ```
-docker build -t hcp4715/hddm:0.8.0 -f Dockerfile .
+docker pull hcp4715/hddm:ipyparallel
 ```
-### How to use this docker image
+Note: you may need sudo permission to run docker.
 
-After built this image or pull it from docker hub, you can then run jupyter notebook in the container (in bash of linux):
+After pulling it from docker hub, you can then run jupyter notebook in the container (in bash of linux):
 
 ```
 docker run -it --rm --cpus=5 \
 -v /home/hcp4715/Results/Data_Analysis/HDDM:/home/jovyan/hddm \
--p 8888:8888 hcp4715/hddm:test jupyter notebook
+-p 8888:8888 hcp4715/hddm:ipyparallel jupyter notebook
 ```
-`docker run` -- run a docker image in a container
+`docker run`:     run a docker image in a container
 
-`-it` -- 
+`-it`:       Keep STDIN open even if not attached
 
-`-v` -- mount a folder to the container
+`--rm`:     Automatically remove the container when it exits
 
-`/home/hcp4715/Results/Data_Analysis/HDDM` is the directory where I stored my data. 
+`--cpus=5`: Number of cores will be used by docker
 
-`-p` -- port
+`-v`: mount a folder to the container
 
-`hcp4715/hddm:test` -- the docker image to run
+`/home/hcp4715/Results/Data_Analysis/HDDM`: the directory of a local folder where I stored my data. 
 
-`jupyter notebook` -- open juypter notebook when start running the container.
+`-p`: Publish a container’s port(s) to the host
+
+`hcp4715/hddm:ipyparallel`:   the docker image to run
+
+`jupyter notebook`:     Open juypter notebook when start running the container.
 
 After running the code above, bash will has output like this:
 
@@ -65,7 +63,20 @@ Note that before diving into the jupyter notebook and start analysis, don't forg
 
 The number of engines started should be less than or equals to the number of cores of your machine. Later, when run parallel processing, the number of the engines should be less or equals to the number of engines you started here.
 
-### Acknowledgement
-Thanks @madslupe for his version of HDDM image.
+### How this docker image was built
+An alternative way to get the docker image is to build it from `Dockerfile`.
 
-Thanks Dr Rui Yuan for his help in making the Dockerfile.
+I built this docker image under Ubuntu 20.04. 
+
+This Dockerfile is modified by Dr. Rui Yuan @ Stanford, based on the Dockerfile of [jupyter/scipy-notebook](https://hub.docker.com/r/jupyter/scipy-notebook/dockerfile). We installed additional packages for HDDM and `ipyparallel`, and configured the `ipyparallel` so that we can run it in jupyter noebook (doesn't work for jupyterlab yet). See `Dockerfile` for the details
+
+Code for building the docker image (don't forget the `.` in the end):
+
+```
+docker build -t hcp4715/hddm:ipyparallel -f Dockerfile .
+```
+
+### Acknowledgement
+Thank @madslupe for his version of HDDM image.
+
+Thank Dr Rui Yuan for his help in making the Dockerfile.
