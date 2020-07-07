@@ -4,7 +4,7 @@
 HDDM is a python package for hierarchical drift diffusion modelling, see [here](http://ski.clps.brown.edu/hddm_docs/index.html) for more.
 
 ### Why I build this docker image?
-There was a very nice [HDDM docker image](https://registry.hub.docker.com/r/madslupe/hddm) by Mads (@madslupe). However, this docker image doesn't include `ipyparallel`, a package we need to run multiple chains in **parallel**. Given that running multiple chains to check the convergence is part of Bayesian routine now, it's important to make it easier for running HDDM too. 
+There was a very nice [HDDM docker image](https://registry.hub.docker.com/r/madslupe/hddm) by Mads ([@madslupe](https://hub.docker.com/r/madslupe/hddm)). However, this docker image doesn't include `ipyparallel`, a package we need to run multiple chains in **parallel**. Given that running multiple chains to check the convergence is part of Bayesian routine now, it's important to make it easier for running HDDM too. 
 
 ### How to use this docker image
 
@@ -55,7 +55,7 @@ Or copy and paste one of these URLs:
 
 Copy the url (http://127.0.0.1:8888/?.......) to a browser (firefox or chrome) and it will show a web page, this is the interface of jupyter notebook! 
 
-Under the `Files` tab, there are two folders: `work`, and `hddm`, the `hddm` folder is the folder where I stored your data. Enter this folder, you can start your analysis within jupyter notebook (I already had jupyter notebook in this folder).
+Under the `Files` tab, there are two folders: `work`, and `hddm`, the `hddm` folder is the folder where the data are stored. Enter this folder, you can start your analysis within jupyter notebook (I already had jupyter notebook in this folder).
 
 Note that before diving into the jupyter notebook and start analysis, don't forget start multiple engines under the `IPython Clusters` tab in the jupyter notebook window.
 
@@ -77,6 +77,6 @@ docker build -t hcp4715/hddm:ipyparallel -f Dockerfile .
 ```
 
 ### Acknowledgement
-Thank @madslupe for his version of HDDM image.
+Thank [@madslupe](https://github.com/madslupe) for his previous HDDM image, which laid the base for the current version.
 
-Thank Dr Rui Yuan for his help in making the Dockerfile.
+Thank [Dr Rui Yuan](https://scholar.google.com/citations?user=h8_wSLkAAAAJ&hl=en) for his help in creating the Dockerfile.
