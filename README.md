@@ -4,7 +4,7 @@
 HDDM is a python package for hierarchical drift diffusion modelling, see [here](http://ski.clps.brown.edu/hddm_docs/index.html) for more.
 
 ### Why I build this docker image?
-There was a very nice [HDDM docker image](https://registry.hub.docker.com/r/madslupe/hddm) by Mads ([@madslupe](https://hub.docker.com/r/madslupe/hddm)). However, this docker image doesn't include `ipyparallel`, a package we need to run multiple chains in **parallel**. Given that running multiple chains to check the convergence is part of Bayesian routine now, it's important to make it easier for running HDDM too. 
+There was a very nice HDDM docker image by Mads ([@madslupe](https://hub.docker.com/r/madslupe/hddm)). However, this docker image doesn't include `ipyparallel`, a package we need to run multiple chains in **parallel**. Given that running multiple chains to check the convergence is part of Bayesian routine now, it's important to make it easier for running HDDM too. 
 
 ### How to use this docker image
 
@@ -61,7 +61,16 @@ Note that before diving into the jupyter notebook and start analysis, don't forg
 
 ![screenshot for ipython clusters](pic/icluster.png)
 
-The number of engines started should be less than or equals to the number of cores of your machine. Later, when run parallel processing, the number of the engines should be less or equals to the number of engines you started here.
+The number of engines started should be less than or equals to the number of cores of your machine. Later, when run parallel processing, the number of the engines should be less or equals to the number of engines you started here. If mulitiple engines haven't been started before running the parallel processing, the following error will occur:
+
+```
+OSError: Connection file '~/.ipython/profile_default/security/ipcontroller-client.json' not found.
+You have attempted to connect to an IPython Cluster but no Controller could be found.
+Please double-check your configuration and ensure that a cluster is running.
+```
+
+### Potential errors
+* Permission denied. Please see this [post](https://groups.google.com/forum/#!topic/hddm-users/Qh-aOC0N6cU) about the permission problem.
 
 ### How this docker image was built
 An alternative way to get the docker image is to build it from `Dockerfile`.
