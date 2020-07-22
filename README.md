@@ -65,7 +65,9 @@ The number of engines started should be less than or equals to the number of cor
 
 ```
 OSError: Connection file '~/.ipython/profile_default/security/ipcontroller-client.json' not found.
+
 You have attempted to connect to an IPython Cluster but no Controller could be found.
+
 Please double-check your configuration and ensure that a cluster is running.
 ```
 
