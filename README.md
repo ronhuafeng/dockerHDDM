@@ -1,46 +1,48 @@
-# Create a docker image for HDDM 0.8.0
+# A HDDM 0.8.0 docker image with ipyparallel
 
-### What is HDDM? 
+## What is HDDM? 
 HDDM is a python package for hierarchical drift diffusion modelling, see [here](http://ski.clps.brown.edu/hddm_docs/index.html) for more.
 
-### Why I build this docker image?
+## Why I build this docker image?
 There was a very nice HDDM docker image by Mads ([@madslupe](https://hub.docker.com/r/madslupe/hddm)). However, this docker image doesn't include `ipyparallel`, a package we need to run multiple chains in **parallel**. Given that running multiple chains to check the convergence is part of Bayesian routine now, it's important to make it easier for running HDDM too. 
 
-### How to use this docker image
+## How to use this docker image
 
-First, install docker and test it. There are many tutorial on this, here is one on [docker's website](https://docs.docker.com/engine/install/ubuntu/).
+First, install docker and test it. There are many tutorial on this, here is one on [docker's website](https://docs.docker.com/engine/install/ubuntu/) for linux.
 
-Then, an easy way to use this image is to pull it from docker hub:
+Then, just pull the docker image from docker hub:
 
 ```
 docker pull hcp4715/hddm:example
 ```
-Note: you may need sudo permission to run docker.
 
-After pulling it from docker hub, you can then run jupyter notebook in the container (in bash of linux):
+**Note**: you may need sudo permission to run `docker`.
+
+After pulling it from docker hub, you can then run jupyter notebook in the container (e.g., in bash of linux):
 
 ```
 docker run -it --rm --cpus=5 \
 -v /home/hcp4715/Results/Data_Analysis/HDDM:/home/jovyan/hddm \
 -p 8888:8888 hcp4715/hddm:example jupyter notebook
 ```
-`docker run`:   run a docker image in a container
 
-`-it`:  Keep STDIN open even if not attached
+`docker run` ---- run a docker image in a container
 
-`--rm`: Automatically remove the container when it exits
+`-it` ---- Keep STDIN open even if not attached
 
-`--cpus=5`:     Number of cores will be used by docker
+`--rm` ---- Automatically remove the container when it exits
 
-`-v`:   mount a folder to the container
+`--cpus=5` ---- Number of cores will be used by docker
 
-`/home/hcp4715/Results/Data_Analysis/HDDM`: the directory of a local folder where I stored my data. 
+`-v` ---- mount a folder to the container
 
-`-p`: Publish a container’s port(s) to the host
+`/home/hcp4715/Data_Analysis/HDDM` ---- the directory of a local folder where I stored my data. 
 
-`hcp4715/hddm:example`:     the docker image to run
+`-p` ---- Publish a container’s port(s) to the host
 
-`jupyter notebook`:     Open juypter notebook when start running the container.
+`hcp4715/hddm:example` ---- the docker image to run
+
+`jupyter notebook` ---- Open juypter notebook when start running the container.
 
 After running the code above, bash will has output like this:
 
@@ -55,7 +57,7 @@ Or copy and paste one of these URLs:
 
 Copy the url (http://127.0.0.1:8888/?.......) to a browser (firefox or chrome) and it will show a web page, this is the interface of jupyter notebook! 
 
-Under the `Files` tab, there are two folders: `work`, `example`, and `hddm`. The `hddm` folder is the folder where the data are stored. The `example` folder includes one dataset and one jupyter notebook, you can test the parallel processing by running this jupyter notebook.
+Under the `Files` tab, there should be three folders: `work`, `example`, and `hddm`. The `hddm` folder is the local folder mounted in docker container. The `example` folder was the one built in docker image, this folder includes one dataset and one jupyter notebook, you can test the parallel processing by running this jupyter notebook.
 
 Enter `hddm` folder, you can start your analysis within jupyter notebook.
 
@@ -73,18 +75,18 @@ You have attempted to connect to an IPython Cluster but no Controller could be f
 Please double-check your configuration and ensure that a cluster is running.
 ```
 
-### Using example
-You can also use the example, without mounting your own folder to the docker image. The example data set from [my previous study](). The example jupyter notebook is used to test the `ipyparallel` in the `hddm:example` image. Run the following code to use the example.
+## Using example
+You can also use the example, without mounting local folder to the docker container. The example data set is from [my previous study](https://collabra.org/articles/10.1525/collabra.301/). The example jupyter notebook is used to test the `ipyparallel` package. Run the following code to use the example.
 
 ```
 docker run -it --rm --cpus=5 \
 -p 8888:8888 hcp4715/hddm:example jupyter notebook
 ```
 
-### Potential errors
+## Potential errors
 * Permission denied. Please see this [post](https://groups.google.com/forum/#!topic/hddm-users/Qh-aOC0N6cU) about the permission problem.
 
-### How this docker image was built
+## How this docker image was built
 An alternative way to get the docker image is to build it from `Dockerfile`.
 
 I built this docker image under Ubuntu 20.04. 
@@ -97,7 +99,7 @@ Code for building the docker image (don't forget the `.` in the end):
 docker build -t hcp4715/hddm:example -f Dockerfile .
 ```
 
-### Acknowledgement
+## Acknowledgement
 Thank [@madslupe](https://github.com/madslupe) for his previous HDDM image, which laid the base for the current version.
 
 Thank [Dr Rui Yuan](https://scholar.google.com/citations?user=h8_wSLkAAAAJ&hl=en) for his help in creating the Dockerfile.
