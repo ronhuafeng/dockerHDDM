@@ -13,7 +13,7 @@ First, install docker and test it. There are many tutorial on this, here is one 
 Then, an easy way to use this image is to pull it from docker hub:
 
 ```
-docker pull hcp4715/hddm:ipyparallel
+docker pull hcp4715/hddm:example
 ```
 Note: you may need sudo permission to run docker.
 
@@ -22,7 +22,7 @@ After pulling it from docker hub, you can then run jupyter notebook in the conta
 ```
 docker run -it --rm --cpus=5 \
 -v /home/hcp4715/Results/Data_Analysis/HDDM:/home/jovyan/hddm \
--p 8888:8888 hcp4715/hddm:ipyparallel jupyter notebook
+-p 8888:8888 hcp4715/hddm:example jupyter notebook
 ```
 `docker run`:   run a docker image in a container
 
@@ -38,7 +38,7 @@ docker run -it --rm --cpus=5 \
 
 `-p`: Publish a container’s port(s) to the host
 
-`hcp4715/hddm:ipyparallel`:     the docker image to run
+`hcp4715/hddm:example`:     the docker image to run
 
 `jupyter notebook`:     Open juypter notebook when start running the container.
 
@@ -55,7 +55,7 @@ Or copy and paste one of these URLs:
 
 Copy the url (http://127.0.0.1:8888/?.......) to a browser (firefox or chrome) and it will show a web page, this is the interface of jupyter notebook! 
 
-Under the `Files` tab, there are two folders: `work`, `example`, and `hddm`. The `hddm` folder is the folder where the data are stored. The `example` folder includes one dataset and one jupyter notebook, you can test the ipyparallel processing by running the jupyter notebook.
+Under the `Files` tab, there are two folders: `work`, `example`, and `hddm`. The `hddm` folder is the folder where the data are stored. The `example` folder includes one dataset and one jupyter notebook, you can test the parallel processing by running this jupyter notebook.
 
 Enter `hddm` folder, you can start your analysis within jupyter notebook.
 
@@ -74,7 +74,7 @@ Please double-check your configuration and ensure that a cluster is running.
 ```
 
 ### Using example
-You can also use the example, without mounting your own folder to the docker image. The example data set from [my previous study](). The example jupyter notebook is used to test the `ipyparallel`. Run the following code to use the example.
+You can also use the example, without mounting your own folder to the docker image. The example data set from [my previous study](). The example jupyter notebook is used to test the `ipyparallel` in the `hddm:example` image. Run the following code to use the example.
 
 ```
 docker run -it --rm --cpus=5 \
@@ -94,7 +94,7 @@ This Dockerfile is modified by Dr. Rui Yuan @ Stanford, based on the Dockerfile 
 Code for building the docker image (don't forget the `.` in the end):
 
 ```
-docker build -t hcp4715/hddm:ipyparallel -f Dockerfile .
+docker build -t hcp4715/hddm:example -f Dockerfile .
 ```
 
 ### Acknowledgement
