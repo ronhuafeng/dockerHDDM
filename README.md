@@ -24,21 +24,21 @@ docker run -it --rm --cpus=5 \
 -v /home/hcp4715/Results/Data_Analysis/HDDM:/home/jovyan/hddm \
 -p 8888:8888 hcp4715/hddm:ipyparallel jupyter notebook
 ```
-`docker run`:     run a docker image in a container
+`docker run`:   run a docker image in a container
 
-`-it`:       Keep STDIN open even if not attached
+`-it`:  Keep STDIN open even if not attached
 
-`--rm`:     Automatically remove the container when it exits
+`--rm`: Automatically remove the container when it exits
 
-`--cpus=5`: Number of cores will be used by docker
+`--cpus=5`:     Number of cores will be used by docker
 
-`-v`: mount a folder to the container
+`-v`:   mount a folder to the container
 
 `/home/hcp4715/Results/Data_Analysis/HDDM`: the directory of a local folder where I stored my data. 
 
 `-p`: Publish a container’s port(s) to the host
 
-`hcp4715/hddm:ipyparallel`:   the docker image to run
+`hcp4715/hddm:ipyparallel`:     the docker image to run
 
 `jupyter notebook`:     Open juypter notebook when start running the container.
 
@@ -55,7 +55,9 @@ Or copy and paste one of these URLs:
 
 Copy the url (http://127.0.0.1:8888/?.......) to a browser (firefox or chrome) and it will show a web page, this is the interface of jupyter notebook! 
 
-Under the `Files` tab, there are two folders: `work`, and `hddm`, the `hddm` folder is the folder where the data are stored. Enter this folder, you can start your analysis within jupyter notebook (I already had jupyter notebook in this folder).
+Under the `Files` tab, there are two folders: `work`, `example`, and `hddm`. The `hddm` folder is the folder where the data are stored. The `example` folder includes one dataset and one jupyter notebook, you can test the ipyparallel processing by running the jupyter notebook.
+
+Enter `hddm` folder, you can start your analysis within jupyter notebook.
 
 Note that before diving into the jupyter notebook and start analysis, don't forget start multiple engines under the `IPython Clusters` tab in the jupyter notebook window.
 
@@ -69,6 +71,14 @@ OSError: Connection file '~/.ipython/profile_default/security/ipcontroller-clien
 You have attempted to connect to an IPython Cluster but no Controller could be found.
 
 Please double-check your configuration and ensure that a cluster is running.
+```
+
+### Using example
+You can also use the example, without mounting your own folder to the docker image. The example data set from [my previous study](). The example jupyter notebook is used to test the `ipyparallel`. Run the following code to use the example.
+
+```
+docker run -it --rm --cpus=5 \
+-p 8888:8888 hcp4715/hddm:example jupyter notebook
 ```
 
 ### Potential errors

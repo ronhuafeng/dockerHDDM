@@ -70,11 +70,14 @@ RUN conda install --quiet --yes \
     rm -rf "/home/${NB_USER}/.node-gyp" && \
     fix-permissions "/home/${NB_USER}"
 
+USER root
 RUN jupyter notebook --generate-config -y
     
-RUN pip install 'kabuki==0.6.3'
-RUN pip install 'tqdm'
-RUN pip install 'hddm==0.8.0'
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir 'kabuki==0.6.3' && \
+    pip install --no-cache-dir 'tqdm' && \
+    pip install --no-cache-dir 'hddm==0.8.0' && \
+    fix-permissions "/home/${NB_USER}"
 
 # Install facets which does not have a pip or conda package at the moment
 WORKDIR /tmp
@@ -97,5 +100,12 @@ WORKDIR $HOME
 # Change the configuration of ipyparallel
 RUN sed -i  "/# Configuration file for jupyter-notebook./a c.NotebookApp.server_extensions.append('ipyparallel.nbextension')"  /home/jovyan/.jupyter/jupyter_notebook_config.py
 	
+# Create a folder for example
+RUN mkdir /home/$NB_USER/example && \
+   fix-permissions /home/$NB_USER
+
+# Copy example data and scripts to the example folder
+COPY /example/Hddm_test_parallel.ipynb /home/${NB_USER}/example
+COPY /example/df_example.csv /home/${NB_USER}/example
 #RUN ipcluster start -n 2
 #RUN ipython profile create --parallel --profile=myprofile
