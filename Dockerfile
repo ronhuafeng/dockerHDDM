@@ -50,6 +50,7 @@ RUN conda install --quiet --yes \
     'xlrd=1.2.*' \
     'ipyparallel' \
     'pymc' \
+    'git' \
     && \
     conda clean --all -f -y && \
     # Activate ipywidgets extension in the environment that runs the notebook server
@@ -74,9 +75,14 @@ USER root
 RUN jupyter notebook --generate-config -y
     
 RUN pip install --upgrade pip && \
-    pip install --no-cache-dir 'kabuki==0.6.3' && \
+    # pip install --no-cache-dir 'kabuki==0.6.3' && \
     pip install --no-cache-dir 'tqdm' && \
     pip install --no-cache-dir 'hddm==0.8.0' && \
+    fix-permissions "/home/${NB_USER}"
+
+# uninstall old kabuki and install from Github
+RUN pip uninstall -y kabuki && \
+    pip install --no-cache-dir git+git://github.com/hddm-devs/kabuki.git && \
     fix-permissions "/home/${NB_USER}"
 
 # Install facets which does not have a pip or conda package at the moment

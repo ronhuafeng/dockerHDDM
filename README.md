@@ -8,12 +8,12 @@ There was a very nice HDDM docker image by Mads ([@madslupe](https://hub.docker.
 
 ## How to use this docker image
 
-First, install docker and test it. There are many tutorial on this, here is one on [docker's website](https://docs.docker.com/engine/install/ubuntu/) for linux.
+First, install docker and test it. There are many tutorials on this, here is one on [docker's website](https://docs.docker.com/engine/install/ubuntu/) for linux.
 
-Then, just pull the docker image from docker hub:
+Then, pull the current docker image from docker hub:
 
 ```
-docker pull hcp4715/hddm:example
+docker pull hcp4715/hddm:container
 ```
 
 **Note**: you may need sudo permission to run `docker`.
@@ -22,8 +22,8 @@ After pulling it from docker hub, you can then run jupyter notebook in the conta
 
 ```
 docker run -it --rm --cpus=5 \
--v /home/hcp4715/Data_Analysis/HDDM:/home/jovyan/hddm \
--p 8888:8888 hcp4715/hddm:example jupyter notebook
+-v /home/hcp4715/hddm_docker:/home/jovyan/hddm \
+-p 8888:8888 hcp4715/hddm:container jupyter notebook
 ```
 
 `docker run` ---- Run a docker image in a container
@@ -36,19 +36,20 @@ docker run -it --rm --cpus=5 \
 
 `-v` ---- Mount a folder to the container
 
-`/home/hcp4715/Data_Analysis/HDDM` ---- The directory of a local folder where I stored my data. Note, this part might be different in Windows system.
+`/home/hcp4715/hddm_docker` ---- The directory of a local folder where I stored my data. Note, this part might be different in Windows system.
 
-`/home/jovyan/hddm` ---- The directory inside the docker image, or the mounting point of my data folder in the docker image.
+`/home/jovyan/hddm` ---- The directory inside the docker image (the mounting point of the local folder in the docker image).
 
 `-p` ---- Publish a container’s port(s) to the host
 
-`hcp4715/hddm:example` ---- The docker image to run
+`hcp4715/hddm:container` ---- The docker image to run
 
 `jupyter notebook` ---- Open juypter notebook when start running the container.
 
 After running the code above, bash will has output like this:
 
 ```
+....
 ....
 To access the notebook, open this file in a browser:
         file:///home/jovyan/.local/share/jupyter/runtime/nbserver-6-open.html
@@ -82,7 +83,7 @@ You can also use the example, without mounting a local folder to the docker cont
 
 ```
 docker run -it --rm --cpus=5 \
--p 8888:8888 hcp4715/hddm:example jupyter notebook
+-p 8888:8888 hcp4715/hddm:container jupyter notebook
 ```
 
 ## Potential errors
@@ -98,7 +99,7 @@ This Dockerfile is modified by Dr. Rui Yuan @ Stanford, based on the Dockerfile 
 Code for building the docker image (don't forget the `.` in the end):
 
 ```
-docker build -t hcp4715/hddm:example -f Dockerfile .
+docker build -t hcp4715/hddm:container -f Dockerfile .
 ```
 
 ## Acknowledgement
