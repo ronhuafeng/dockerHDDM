@@ -7,8 +7,11 @@ HDDM is a python package for hierarchical drift diffusion modelling, see [here](
 There was a very nice HDDM docker image by Mads ([@madslupe](https://hub.docker.com/r/madslupe/hddm)). However, this docker image doesn't include `ipyparallel`, a package we need to run multiple chains in **parallel**. Given that running multiple chains to check the convergence is part of routine in Bayesian data analysis now, it's important to make this process easier and faster. `ipyparallel` can help us if we use HDDM. 
 
 ## How to use this docker image
+### Installation
+First, install docker and test it. There are many tutorials on this.
 
-First, install docker and test it. There are many tutorials on this, here is one on [docker's website](https://docs.docker.com/engine/install/ubuntu/) for linux.
+#### Ubuntu
+Please read this [post on docker's website](https://docs.docker.com/engine/install/ubuntu/) for installing docker for linux (ubuntu included).
 
 Then, pull the current docker image from docker hub:
 
@@ -18,13 +21,33 @@ docker pull hcp4715/hddm:container
 
 **Note**: you may need sudo permission to run `docker`.
 
-After pulling it from docker hub, you can then run jupyter notebook in the container (e.g., in bash of linux):
+#### Window 10 (pro)
+Please read this [post](https://docs.docker.com/docker-for-windows/install/) for installing docker on window 10.
+
+Then, open window power shell, and pull the current docker image from docker hub:
 
 ```
+docker pull hcp4715/hddm:container
+```
+
+### Open Jupyter notebook
+
+After pulling it from docker hub, you can then run jupyter notebook in the container (e.g., in bash of linux or power shell of windows):
+
+Example code for linux:
+```
 docker run -it --rm --cpus=5 \
+-e NB_USER=jovyan -e CHOWN_HOME=yes -e CHOWN_EXTRA_OPTS='-R' -w /home/jovyan/ \
 -v /home/hcp4715/hddm_docker:/home/jovyan/hddm \
 -p 8888:8888 hcp4715/hddm:container jupyter notebook
 ```
+
+Example code for windows:
+
+```
+docker run -it --rm --cpus=5 -e NB_USER=jovyan -e CHOWN_HOME=yes -e CHOWN_EXTRA_OPTS='-R' -w /home/jovyan/ -v /d/hcp4715/hddm_docker:/home/jovyan/ -p 8888:8888 hcp4715/hddm:container jupyter notebook  
+```
+Note the different way for writing the folder path.
 
 `docker run` ---- Run a docker image in a container
 
@@ -33,6 +56,8 @@ docker run -it --rm --cpus=5 \
 `--rm` ---- Automatically remove the container when it exits
 
 `--cpus=5` ---- Number of cores will be used by docker
+
+`-e NB_USER=jovyan -e CHOWN_HOME=yes -e CHOWN_EXTRA_OPTS='-R' -w /home/jovyan/`  ---- Give the current user permission to write files.
 
 `-v` ---- Mount a folder to the container
 
@@ -87,7 +112,7 @@ docker run -it --rm --cpus=5 \
 ```
 
 ## Potential errors
-* Permission denied. Please see this [post](https://groups.google.com/forum/#!topic/hddm-users/Qh-aOC0N6cU) about the permission problem.
+* Permission denied. If you still encounter this error, please see this [post](https://groups.google.com/forum/#!topic/hddm-users/Qh-aOC0N6cU) about the permission problem. 
 
 ## How this docker image was built
 An alternative way to get the docker image is to build it from `Dockerfile`.
