@@ -4,7 +4,7 @@
 HDDM is a python package for hierarchical drift diffusion modelling, see [here](http://ski.clps.brown.edu/hddm_docs/index.html) for more.
 
 ## Why I build this docker image?
-There was a very nice HDDM docker image by Mads ([@madslupe](https://hub.docker.com/r/madslupe/hddm)). However, this docker image doesn't include `ipyparallel`, a package we need to run multiple chains in **parallel**. Given that running multiple chains to check the convergence is part of routine in Bayesian data analysis now, it's important to make this process easier and faster. `ipyparallel` can help us if we use HDDM. 
+There was a very nice HDDM docker image by Mads ([@madslupe](https://hub.docker.com/r/madslupe/hddm)). However, this docker image doesn't include `ipyparallel`, a package we need to run multiple chains in **parallel**. Given that running multiple chains to check the convergence is part of routine in Bayesian data analysis now, it's important to make this process easier and faster. `ipyparallel` can help us if we use HDDM.  
 
 ## How to use this docker image
 ### Installation
@@ -34,7 +34,7 @@ docker pull hcp4715/hddm:container
 
 After pulling it from docker hub, you can then run jupyter notebook in the container (e.g., in bash of linux or power shell of windows):
 
-Example code for linux:
+#### Example code for Ubuntu:
 ```
 docker run -it --rm --cpus=5 \
 -e NB_USER=jovyan -e CHOWN_HOME=yes -e CHOWN_EXTRA_OPTS='-R' -w /home/jovyan/ \
@@ -42,12 +42,13 @@ docker run -it --rm --cpus=5 \
 -p 8888:8888 hcp4715/hddm:container jupyter notebook
 ```
 
-Example code for windows:
+#### Example code for windows:
 
 ```
-docker run -it --rm --cpus=5 -e NB_USER=jovyan -e CHOWN_HOME=yes -e CHOWN_EXTRA_OPTS='-R' -w /home/jovyan/ -v /d/hcp4715/hddm_docker:/home/jovyan/ -p 8888:8888 hcp4715/hddm:container jupyter notebook  
+docker run -it --rm --cpus=5 -e NB_USER=jovyan -e CHOWN_HOME=yes -e CHOWN_EXTRA_OPTS='-R' -w /home/jovyan/ -v /d/hcp4715/hddm_docker:/home/jovyan/hddm -p 8888:8888 hcp4715/hddm:container jupyter notebook  
 ```
-Note the different way for writing the folder path.
+
+#### Explanations of the example code
 
 `docker run` ---- Run a docker image in a container
 
@@ -61,9 +62,11 @@ Note the different way for writing the folder path.
 
 `-v` ---- Mount a folder to the container
 
-`/home/hcp4715/hddm_docker` ---- The directory of a local folder where I stored my data. Note, this part might be different in Windows system.
+`/home/hcp4715/hddm_docker` ---- The directory of a local folder where I stored my data. [For Linux]
 
-`/home/jovyan/hddm` ---- The directory inside the docker image (the mounting point of the local folder in the docker image).
+`/d/hcp4715/hddm_docker` ---- The directory of a local folder under drive D. It appears as `D:\hcp4715\hddm_docker` in windows system.
+
+`/home/jovyan/hddm` ---- The directory inside the docker image (the mounting point of the local folder in the docker image). Note that the docker container itself likes a mini virtual linux system, so the file system inside it is linux style. 
 
 `-p` ---- Publish a container’s port(s) to the host
 
@@ -83,7 +86,7 @@ Or copy and paste one of these URLs:
  or http://127.0.0.1:8888/?token=75f1a7a8ffcbb55f0c2802433a9a5d57ac00868e05089c09
 ```
 
-Copy the url (http://127.0.0.1:8888/?.......) to a browser (firefox or chrome) and it will show a web page, this is the interface of jupyter notebook! Note, in Windows system, it might be `localhost` instead of `127.0.0.1` in the url.
+Copy the full url (http://127.0.0.1:8888/?.......) to a browser (firefox or chrome) and it will show a web page, this is the interface of jupyter notebook! Note, in Windows system, it might be `localhost` instead of `127.0.0.1` in the url.
 
 Under the `Files` tab, there should be three folders: `work`, `example`, and `hddm`. The `hddm` folder is the local folder mounted in docker container. The `example` folder was the one built in docker image, this folder includes one dataset and one jupyter notebook, you can test the parallel processing by running this jupyter notebook.
 
