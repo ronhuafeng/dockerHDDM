@@ -3,8 +3,12 @@
 ## What is HDDM? 
 HDDM is a python package for hierarchical drift diffusion modelling, see [here](http://ski.clps.brown.edu/hddm_docs/index.html) for more.
 
-## Why I build this docker image?
-There was a very nice HDDM docker image by Mads ([@madslupe](https://hub.docker.com/r/madslupe/hddm)). However, this docker image doesn't include `ipyparallel`, a package we need to run multiple chains in **parallel**. Given that running multiple chains to check the convergence is part of routine in Bayesian data analysis now, it's important to make this process easier and faster. `ipyparallel` can help us if we use HDDM.  
+## What's new about this docker image?
+This docker image was based on a previous HDDM docker image by Mads ([@madslupe](https://hub.docker.com/r/madslupe/hddm)). However, Mads' image doesn't include `ipyparallel`, a package we need to run multiple chains in **parallel**. Given that running multiple chains to check the convergence is part of pipeline in Bayesian data analysis now, it's important to make it easier to run multiple chains. 
+
+Besides, the plotting function in the original `HDDM` was a bit outdated. We included a few new python packages that are used for plotting or inference (`seaborn`, `plotly`, `Arviz`, `pymc3`, and `bambi`). 
+
+In the `example` folder of this docker image (see below on how to use this image), you can find three example jupyter notebook: one for parallel processing, one for reproducing the [official tutorial](http://ski.clps.brown.edu/hddm_docs/tutorial.html), and one for converting HDDM model objects into `ArviZ` InferenceData.
 
 ## How to use this docker image
 ### Installation
@@ -16,18 +20,18 @@ Please read this [post on docker's website](https://docs.docker.com/engine/insta
 Then, pull the current docker image from docker hub:
 
 ```
-docker pull hcp4715/hddm:container
+docker pull hcp4715/hddm:arviz
 ```
 
-**Note**: you may need sudo permission to run `docker`.
+**Note**: you may need sudo permission to run the command `docker`.
 
 #### Window 10 (pro)
-Please read this [post](https://docs.docker.com/docker-for-windows/install/) for installing docker on window 10.
+Please read this [post](https://docs.docker.com/docker-for-windows/install/) for installing docker on window 10. During the installation of docker, you might be instructed to install/update your window subsystem linux (WSL), please follow the instruction to finish the installation of docker.
 
 Then, open window power shell, and pull the current docker image from docker hub:
 
 ```
-docker pull hcp4715/hddm:container
+docker pull hcp4715/hddm:arviz
 ```
 
 ### Open Jupyter notebook
@@ -39,13 +43,13 @@ After pulling it from docker hub, you can then run jupyter notebook in the conta
 docker run -it --rm --cpus=5 \
 -e NB_USER=jovyan -e CHOWN_HOME=yes -e CHOWN_EXTRA_OPTS='-R' -w /home/jovyan/ \
 -v /home/hcp4715/hddm_docker:/home/jovyan/hddm \
--p 8888:8888 hcp4715/hddm:container jupyter notebook
+-p 8888:8888 hcp4715/hddm:arviz jupyter notebook
 ```
 
 #### Example code for windows:
 
 ```
-docker run -it --rm --cpus=5 -e NB_USER=jovyan -e CHOWN_HOME=yes -e CHOWN_EXTRA_OPTS='-R' -w /home/jovyan/ -v /d/hcp4715/hddm_docker:/home/jovyan/hddm -p 8888:8888 hcp4715/hddm:container jupyter notebook  
+docker run -it --rm --cpus=5 -e NB_USER=jovyan -e CHOWN_HOME=yes -e CHOWN_EXTRA_OPTS='-R' -w /home/jovyan/ -v /d/hcp4715/hddm_docker:/home/jovyan/hddm -p 8888:8888 hcp4715/hddm:arviz jupyter notebook  
 ```
 
 #### Explanations of the example code
@@ -70,7 +74,7 @@ docker run -it --rm --cpus=5 -e NB_USER=jovyan -e CHOWN_HOME=yes -e CHOWN_EXTRA_
 
 `-p` ---- Publish a container’s port(s) to the host
 
-`hcp4715/hddm:container` ---- The docker image to run
+`hcp4715/hddm:arviz` ---- The docker image to run, `arviz` after `:` is the tag of the current docker image.
 
 `jupyter notebook` ---- Open juypter notebook when start running the container.
 
@@ -109,9 +113,11 @@ Please double-check your configuration and ensure that a cluster is running.
 ## Using example
 You can also use the example, without mounting a local folder to the docker container. The example data set is from [my previous study](https://collabra.org/articles/10.1525/collabra.301/). The example jupyter notebook is used to test the `ipyparallel` package. Run the following code to use the example.
 
+The `example` folder also includes two other jupyter notebooks, `HDDM_official_tutorial_reproduced.ipynb` reproduces the tutorial code, using the `HDDM` in this docker image; `HDDM_official_tutorial_ArviZ.ipynb` illustrates how to convert HDDM data to `ArviZ` InferenceData to plot posterior traces and posterior predictives.
+
 ```
 docker run -it --rm --cpus=5 \
--p 8888:8888 hcp4715/hddm:container jupyter notebook
+-p 8888:8888 hcp4715/hddm:arviz jupyter notebook
 ```
 
 ## Potential errors
@@ -127,7 +133,7 @@ This Dockerfile is modified by Dr. Rui Yuan @ Stanford, based on the Dockerfile 
 Code for building the docker image (don't forget the `.` in the end):
 
 ```
-docker build -t hcp4715/hddm:container -f Dockerfile .
+docker build -t hcp4715/hddm:arviz -f Dockerfile .
 ```
 
 ## Acknowledgement

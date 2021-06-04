@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # The buid from the base of minimal-notebook, based on python 3.7.6 (54462805efcb)
+# need to update to 3.7.10 3.7.6-cpython_h8356626_6 --> 3.7.10-hffdb5ce_100_cpython
 ARG BASE_CONTAINER=jupyter/minimal-notebook:54462805efcb
 FROM $BASE_CONTAINER
 
@@ -51,6 +52,7 @@ RUN conda install --quiet --yes \
     'ipyparallel' \
     'pymc' \
     'git' \
+    `mkl-service` \
     && \
     conda clean --all -f -y && \
     # Activate ipywidgets extension in the environment that runs the notebook server
@@ -74,10 +76,16 @@ RUN conda install --quiet --yes \
 USER root
 RUN jupyter notebook --generate-config -y
     
+USER $NB_UID
 RUN pip install --upgrade pip && \
+    pip install --no-cache-dir 'plotly==4.14.3' && \
+    pip install --no-cache-dir 'cufflinks' && \
+    pip install --no-cache-dir 'ptitprince' && \
     # pip install --no-cache-dir 'kabuki==0.6.3' && \
-    pip install --no-cache-dir 'tqdm' && \
+    pip install --no-cache-dir 'p_tqdm' && \
     pip install --no-cache-dir 'hddm==0.8.0' && \
+    pip install --no-cache-dir 'pymc3' && \
+    pip install --no-cache-dir 'bambi' && \
     fix-permissions "/home/${NB_USER}"
 
 # uninstall old kabuki and install from Github
@@ -113,5 +121,7 @@ RUN mkdir /home/$NB_USER/example && \
 # Copy example data and scripts to the example folder
 COPY /example/Hddm_test_parallel.ipynb /home/${NB_USER}/example
 COPY /example/df_example.csv /home/${NB_USER}/example
+COPY /example/HDDM_official_tutorial_ArviZ.ipynb /home/${NB_USER}/example
+COPY /example/HDDM_official_tutorial_reproduced.ipynb /home/${NB_USER}/example
 #RUN ipcluster start -n 2
 #RUN ipython profile create --parallel --profile=myprofile
