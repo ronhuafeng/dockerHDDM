@@ -42,15 +42,15 @@ RUN conda install --quiet --yes \
     'scikit-image=0.16.*' \
     'scikit-learn=0.22.*' \
     'scipy=1.4.*' \
-    'seaborn' \
+    'seaborn=0.11.*' \
     'sqlalchemy=1.3.*' \
     'statsmodels=0.11.*' \
     'sympy=1.5.*' \
     'vincent=0.4.*' \
     'widgetsnbextension=3.5.*'\
     'xlrd=1.2.*' \
-    'ipyparallel' \
-    'pymc' \
+    'ipyparallel=6.3.0' \
+    'pymc=2.3.8' \
     'git' \
     `mkl-service` \
     && \
@@ -78,14 +78,17 @@ RUN jupyter notebook --generate-config -y
     
 USER $NB_UID
 RUN pip install --upgrade pip && \
+    pip install --no-cache-dir 'hddm==0.8.0' && \
+    # install plotly and its chart studio extension
+    pip install --no-cache-dir 'chart_studio==1.1.0' && \
     pip install --no-cache-dir 'plotly==4.14.3' && \
-    pip install --no-cache-dir 'cufflinks' && \
-    pip install --no-cache-dir 'ptitprince' && \
+    pip install --no-cache-dir 'cufflinks==0.17.3' && \
+    # install ptitprince for raincloud plot in python
+    pip install --no-cache-dir 'ptitprince==0.2.*' && \
     # pip install --no-cache-dir 'kabuki==0.6.3' && \
     pip install --no-cache-dir 'p_tqdm' && \
-    pip install --no-cache-dir 'hddm==0.8.0' && \
-    pip install --no-cache-dir 'pymc3' && \
-    pip install --no-cache-dir 'bambi' && \
+    pip install --no-cache-dir 'pymc3==3.11.2' && \
+    pip install --no-cache-dir 'bambi==0.5.0' && \
     fix-permissions "/home/${NB_USER}"
 
 # uninstall old kabuki and install from Github
