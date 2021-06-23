@@ -73,6 +73,9 @@ RUN conda install --quiet --yes \
     rm -rf "/home/${NB_USER}/.node-gyp" && \
     fix-permissions "/home/${NB_USER}"
 
+# conda install --channel=numba llvmlite
+# pip install sparse
+
 USER root
 RUN jupyter notebook --generate-config -y
     
