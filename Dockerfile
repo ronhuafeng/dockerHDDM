@@ -75,6 +75,8 @@ RUN conda install --quiet --yes \
 
 # conda install --channel=numba llvmlite
 # pip install sparse
+# conda install -c conda-forge python-graphviz
+
 
 USER root
 RUN jupyter notebook --generate-config -y
