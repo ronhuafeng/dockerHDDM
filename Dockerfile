@@ -1,27 +1,42 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
 
-# The buid from the base of minimal-notebook, based on python 3.7.6 (54462805efcb)
-# need to update to 3.7.10 3.7.6-cpython_h8356626_6 --> 3.7.10-hffdb5ce_100_cpython
-ARG BASE_CONTAINER=jupyter/minimal-notebook:54462805efcb
+## The buid from the base of minimal-notebook, based on python 3.8.8
+## Modified by Dr. Hu Chuan-Peng, Nanjing Normal University, Nanjing, China.
+
+## In this version, jupyter lab and jupyter have higher version:
+# jupyterlab - 3.0.14
+# jupyter_client - 6.1.12
+# jupyter_core - 4.7.1
+## Which means that some extension for plotting in jupyter should be upgraded too:
+# ipympl >= 0.8
+# matplotlib >= 3.3.1
+# ipywidgets >= 0.76
+# jupyter_widget *
+#  
+## Also note, I removed ipyparallel and used p_tqdm for parallel processing
+
+ARG BASE_CONTAINER=jupyter/minimal-notebook:python-3.8.8
 FROM $BASE_CONTAINER
 
-LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
+LABEL maintainer="Hu Chuan-Peng <hcp4715@hotmail.com>"
 
 USER root
 
 # ffmpeg for matplotlib anim & dvipng for latex labels
 RUN apt-get update && \
+    # apt-get install -y --no-install-recommends apt-utils && \
     apt-get install -y --no-install-recommends ffmpeg dvipng && \
     rm -rf /var/lib/apt/lists/*
 
-#USER $NB_UID
+USER $NB_UID
 
 # Install Python 3 packages
 RUN conda install --quiet --yes \
+    'arviz=0.11.4' \
     'beautifulsoup4=4.9.*' \
     'conda-forge::blas=*=openblas' \
-    'bokeh=2.0.*' \
+    'bokeh=2.4.*' \
     'bottleneck=1.3.*' \
     'cloudpickle=1.4.*' \
     'cython=0.29.*' \
@@ -29,9 +44,11 @@ RUN conda install --quiet --yes \
     'dill=0.3.*' \
     'h5py=2.10.*' \
     'hdf5=1.10.*' \
-    'ipywidgets=7.5.*' \
-    'ipympl=0.5.*'\
-    'matplotlib-base=3.2.*' \
+    'ipywidgets=7.6.*' \
+    'ipympl=0.8.*' \
+    'jupyter_bokeh' \
+    'jupyterlab_widgets' \
+    'matplotlib-base=3.3.*' \
     # numba update to 0.49 fails resolving deps.
     'numba=0.48.*' \
     'numexpr=2.7.*' \
@@ -49,41 +66,24 @@ RUN conda install --quiet --yes \
     'vincent=0.4.*' \
     'widgetsnbextension=3.5.*'\
     'xlrd=1.2.*' \
-    'ipyparallel=6.3.0' \
+    # 'ipyparallel=6.3.0' \
     'pymc=2.3.8' \
     'git' \
-    `mkl-service` \
+    'mkl-service' \
     && \
     conda clean --all -f -y && \
-    # Activate ipywidgets extension in the environment that runs the notebook server
-    jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
-    # Activate ipyparallel extension in the enviroment
-    ipcluster nbextension enable && \
-    # Also activate ipywidgets extension for JupyterLab
-    # Check this URL for most recent compatibilities
-    # https://github.com/jupyter-widgets/ipywidgets/tree/master/packages/jupyterlab-manager
-    jupyter labextension install @jupyter-widgets/jupyterlab-manager@^2.0.0 --no-build && \
-    jupyter labextension install @bokeh/jupyter_bokeh@^2.0.0 --no-build && \
-    jupyter labextension install jupyter-matplotlib@^0.7.2 --no-build && \
-    jupyter lab build -y && \
-    jupyter lab clean -y && \
-    npm cache clean --force && \
-    fix-permissions "${CONDA_DIR}" &&\
-    rm -rf "/home/${NB_USER}/.cache/yarn" && \
-    rm -rf "/home/${NB_USER}/.node-gyp" && \
     fix-permissions "/home/${NB_USER}"
 
 # conda install --channel=numba llvmlite
 # pip install sparse
 # conda install -c conda-forge python-graphviz
 
-
-USER root
-RUN jupyter notebook --generate-config -y
+# USER root
+# RUN jupyter notebook --generate-config -y
     
 USER $NB_UID
 RUN pip install --upgrade pip && \
-    pip install --no-cache-dir 'hddm==0.8.0' && \
+    # pip install --no-cache-dir 'hddm==0.8.0' && \
     # install plotly and its chart studio extension
     pip install --no-cache-dir 'chart_studio==1.1.0' && \
     pip install --no-cache-dir 'plotly==4.14.3' && \
@@ -91,23 +91,25 @@ RUN pip install --upgrade pip && \
     # install ptitprince for raincloud plot in python
     pip install --no-cache-dir 'ptitprince==0.2.*' && \
     # pip install --no-cache-dir 'kabuki==0.6.3' && \
+    pip install --no-cache-dir 'feather-format' && \
     pip install --no-cache-dir 'p_tqdm' && \
-    pip install --no-cache-dir 'pymc3==3.11.2' && \
-    pip install --no-cache-dir 'bambi==0.5.0' && \
+    pip install --no-cache-dir 'pymc3==3.11.*' && \
+    pip install --no-cache-dir 'bambi==0.6.*' && \
     fix-permissions "/home/${NB_USER}"
 
-# uninstall old kabuki and install from Github
-RUN pip uninstall -y kabuki && \
-    pip install --no-cache-dir git+git://github.com/hddm-devs/kabuki.git && \
+# install kabuki and hddm from Github
+RUN pip install --no-cache-dir git+git://github.com/hddm-devs/kabuki.git && \
+    pip install --no-cache-dir git+https://github.com/hddm-devs/hddm && \
     fix-permissions "/home/${NB_USER}"
 
-# Install facets which does not have a pip or conda package at the moment
-WORKDIR /tmp
-
-RUN git clone https://github.com/PAIR-code/facets.git && \
-    jupyter nbextension install facets/facets-dist/ --sys-prefix && \
-    rm -rf /tmp/facets && \
-    fix-permissions "${CONDA_DIR}"  &&\
+# Install PyTorch, CPU-only
+RUN conda install -c pytorch --quiet --yes \
+    'pytorch' \
+    'torchvision' \
+    'torchaudio' \
+    'cpuonly' \
+    && \
+    conda clean --all -f -y && \
     fix-permissions "/home/${NB_USER}"
 
 # Import matplotlib the first time to build the font cache.
@@ -116,20 +118,64 @@ ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"
 RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" &&\
      fix-permissions "/home/${NB_USER}"
 
+## Activate ipywidgets extension
+    # Activate ipywidgets extension in the environment that runs the notebook server
+USER $NB_UID
+
+# Check compatibilities of jupyterlab-manager:
+# https://npm.io/package/@jupyter-widgets/jupyterlab-manager
+# # compatibility with bokeh: https://www.npmjs.com/package/@bokeh/jupyter_bokeh
+# # compatibility with matplotlib: https://www.npmjs.com/package/jupyter-matplotlib
+RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build && \
+    # jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
+    # jupyter labextension install nbdime-jupyterlab --no-build && \
+    # jupyter labextension install bqplot --no-build && \
+    # jupyter labextension install @jupyterlab/vega3-extension --no-build && \
+    # jupyter labextension install @jupyterlab/git --no-build && \
+    # jupyter labextension install @jupyterlab/hub-extension --no-build && \
+    # jupyter labextension install jupyterlab_tensorboard --no-build && \
+    # jupyter labextension install jupyterlab-kernelspy --no-build && \
+    # jupyter labextension install @jupyterlab/plotly-extension --no-build && \
+    # jupyter labextension install jupyterlab-chart-editor --no-build && \
+    # jupyter labextension install plotlywidget --no-build && \
+    # jupyter labextension install @jupyterlab/latex --no-build && \
+    # jupyter labextension install @jupyterlab/server-proxy &&\
+    jupyter labextension install jupyter-matplotlib --no-build && \
+    # jupyter labextension install jupyterlab-drawio --no-build && \
+    # jupyter labextension install jupyter-leaflet --no-build && \
+    # jupyter labextension install qgrid --no-build && \
+    jupyter lab build && \
+        jupyter lab clean && \
+        jlpm cache clean && \
+        npm cache clean --force && \
+        rm -rf "/home/${NB_USER}/.cache/yarn" && \
+        rm -rf "/home/${NB_USER}/.node-gyp" && \
+    fix-permissions "/home/${NB_USER}"
+        
+    # Activate ipyparallel extension in the enviroment
+    # ipcluster nbextension enable && \
+    # Also activate ipywidgets extension for JupyterLab
+    # jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build && \
+    # jupyter labextension install jupyter-matplotlib@^0.10.* --no-build && \
+    # jupyter lab build --dev-build=False --minimize=False -y && \
+    # jupyter lab clean -y && \
+    # npm cache clean --force && \
+    # fix-permissions "${CONDA_DIR}" &&\
+    # rm -rf "/home/${NB_USER}/.cache/yarn" && \
+    # rm -rf "/home/${NB_USER}/.node-gyp" && \
+    # fix-permissions "/home/${NB_USER}"
+
 USER $NB_UID
 WORKDIR $HOME
 
-# Change the configuration of ipyparallel
-RUN sed -i  "/# Configuration file for jupyter-notebook./a c.NotebookApp.server_extensions.append('ipyparallel.nbextension')"  /home/jovyan/.jupyter/jupyter_notebook_config.py
+# # Change the configuration of ipyparallel
+# RUN sed -i  "/# Configuration file for jupyter-notebook./a c.NotebookApp.server_extensions.append('ipyparallel.nbextension')"  /home/jovyan/.jupyter/jupyter_notebook_config.py
 	
 # Create a folder for example
 RUN mkdir /home/$NB_USER/example && \
    fix-permissions /home/$NB_USER
 
 # Copy example data and scripts to the example folder
-COPY /example/Hddm_test_parallel.ipynb /home/${NB_USER}/example
-COPY /example/df_example.csv /home/${NB_USER}/example
-COPY /example/HDDM_official_tutorial_ArviZ.ipynb /home/${NB_USER}/example
 COPY /example/HDDM_official_tutorial_reproduced.ipynb /home/${NB_USER}/example
 #RUN ipcluster start -n 2
 #RUN ipython profile create --parallel --profile=myprofile

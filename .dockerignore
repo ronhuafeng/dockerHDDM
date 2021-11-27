@@ -1,0 +1,5 @@
+*.git/
+*.ipynb_checkpoints/
+*/*.ipynb_checkpoints/
+*/*pycache*/
+./example/*chain*
