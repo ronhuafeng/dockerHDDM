@@ -25,7 +25,7 @@ USER root
 
 # ffmpeg for matplotlib anim & dvipng for latex labels
 RUN apt-get update && \
-    # apt-get install -y --no-install-recommends apt-utils && \
+    apt-get install -y --no-install-recommends apt-utils && \
     apt-get install -y --no-install-recommends ffmpeg dvipng && \
     rm -rf /var/lib/apt/lists/*
 
@@ -48,11 +48,11 @@ RUN conda install --quiet --yes \
     'ipympl=0.8.*' \
     'jupyter_bokeh' \
     'jupyterlab_widgets' \
-    'matplotlib-base=3.3.*' \
+    'matplotlib-base=3.5.*' \
     # numba update to 0.49 fails resolving deps.
-    'numba=0.48.*' \
+    'numba=0.55.*' \
     'numexpr=2.7.*' \
-    'pandas=1.0.*' \
+    'pandas=1.4.*' \
     'patsy=0.5.*' \
     'protobuf=3.11.*' \
     'pytables=3.6.*' \
@@ -98,15 +98,15 @@ RUN pip install --upgrade pip && \
     fix-permissions "/home/${NB_USER}"
 
 # install kabuki and hddm from Github
-RUN pip install --no-cache-dir git+git://github.com/hddm-devs/kabuki.git && \
+RUN pip install --no-cache-dir git+https://github.com/hddm-devs/kabuki && \
     pip install --no-cache-dir git+https://github.com/hddm-devs/hddm && \
     fix-permissions "/home/${NB_USER}"
 
 # Install PyTorch, CPU-only
 RUN conda install -c pytorch --quiet --yes \
-    'pytorch' \
-    'torchvision' \
-    'torchaudio' \
+    'pytorch=1.7.0' \
+    'torchvision=0.8.0' \
+    'torchaudio=0.7.0' \
     'cpuonly' \
     && \
     conda clean --all -f -y && \
