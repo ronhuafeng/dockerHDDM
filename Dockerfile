@@ -177,5 +177,6 @@ RUN mkdir /home/$NB_USER/example && \
 
 # Copy example data and scripts to the example folder
 COPY /example/HDDM_official_tutorial_reproduced.ipynb /home/${NB_USER}/example
+COPY /example/LAN_Tutorial_reproduced.ipynb /home/${NB_USER}/example
 #RUN ipcluster start -n 2
 #RUN ipython profile create --parallel --profile=myprofile
