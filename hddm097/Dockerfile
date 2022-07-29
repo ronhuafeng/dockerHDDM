@@ -44,21 +44,21 @@ RUN conda install --quiet --yes \
     'dill=0.3.*' \
     'h5py=2.10.*' \
     'hdf5=1.10.*' \
-    'ipywidgets=7.6.*' \
-    'ipympl=0.8.*' \
+    'ipywidgets' \
+    'ipympl*' \
     'jupyter_bokeh' \
     'jupyterlab_widgets' \
     'matplotlib-base=3.5.*' \
-    # numba update to 0.49 fails resolving deps.
     'numba=0.55.*' \
     'numexpr=2.7.*' \
+    'numpy=1.19.*' \
     'pandas=1.0.5' \
     'patsy=0.5.*' \
     'protobuf=3.11.*' \
     'pytables=3.6.*' \
     'scikit-image=0.16.*' \
     'scikit-learn=1.1.*' \
-    'scipy=1.4.*' \
+    'scipy=1.7.3' \
     'seaborn=0.11.*' \
     'sqlalchemy=1.3.*' \
     'statsmodels=0.13.*' \
@@ -66,20 +66,12 @@ RUN conda install --quiet --yes \
     'vincent=0.4.*' \
     'widgetsnbextension=3.5.*'\
     'xlrd=1.2.*' \
-    # 'ipyparallel=6.3.0' \
     'pymc=2.3.8' \
     'git' \
     'mkl-service' \
     && \
     conda clean --all -f -y && \
     fix-permissions "/home/${NB_USER}"
-
-# conda install --channel=numba llvmlite
-# pip install sparse
-# conda install -c conda-forge python-graphviz
-
-# USER root
-# RUN jupyter notebook --generate-config -y
     
 USER $NB_UID
 RUN pip install --upgrade pip && \
@@ -96,12 +88,13 @@ RUN pip install --upgrade pip && \
 
 # install kabuki and hddm from Github
 RUN pip install --no-cache-dir git+https://github.com/hddm-devs/kabuki && \
-    pip install --no-cache-dir git+https://github.com/hddm-devs/hddm.git@1bb6b0e25b992b56783bc96437f220727c9f1e02 && \
+    pip install --no-cache-dir git+https://github.com/hddm-devs/hddm.git@3fe1b33c79cac9b3e9556290b5344decb5f56291 && \
     fix-permissions "/home/${NB_USER}"
 
 # Install pymc3 after install hddm to avoid compatibility issue.
 RUN pip install --no-cache-dir 'pymc3==3.11.*' && \
-    pip install --no-cache-dir 'bambi==0.9.*' && \
+    # can not use bambi 0.9 because it require pymc4
+    pip install --no-cache-dir 'bambi==0.8.*' && \
     pip install --no-cache-dir 'paranoid-scientist' && \
     pip install --no-cache-dir 'pyddm' && \
     fix-permissions "/home/${NB_USER}"
@@ -124,56 +117,40 @@ RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" &&\
 
 ## Activate ipywidgets extension
     # Activate ipywidgets extension in the environment that runs the notebook server
-USER $NB_UID
+# USER $NB_UID
 
 # Check compatibilities of jupyterlab-manager:
 # https://npm.io/package/@jupyter-widgets/jupyterlab-manager
 # # compatibility with bokeh: https://www.npmjs.com/package/@bokeh/jupyter_bokeh
 # # compatibility with matplotlib: https://www.npmjs.com/package/jupyter-matplotlib
-RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build && \
-    # jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
-    # jupyter labextension install nbdime-jupyterlab --no-build && \
-    # jupyter labextension install bqplot --no-build && \
-    # jupyter labextension install @jupyterlab/vega3-extension --no-build && \
-    # jupyter labextension install @jupyterlab/git --no-build && \
-    # jupyter labextension install @jupyterlab/hub-extension --no-build && \
-    # jupyter labextension install jupyterlab_tensorboard --no-build && \
-    # jupyter labextension install jupyterlab-kernelspy --no-build && \
-    # jupyter labextension install @jupyterlab/plotly-extension --no-build && \
-    # jupyter labextension install jupyterlab-chart-editor --no-build && \
-    # jupyter labextension install plotlywidget --no-build && \
-    # jupyter labextension install @jupyterlab/latex --no-build && \
-    # jupyter labextension install @jupyterlab/server-proxy &&\
-    jupyter labextension install jupyter-matplotlib --no-build && \
-    # jupyter labextension install jupyterlab-drawio --no-build && \
-    # jupyter labextension install jupyter-leaflet --no-build && \
-    # jupyter labextension install qgrid --no-build && \
-    jupyter lab build && \
-        jupyter lab clean && \
-        jlpm cache clean && \
-        npm cache clean --force && \
-        rm -rf "/home/${NB_USER}/.cache/yarn" && \
-        rm -rf "/home/${NB_USER}/.node-gyp" && \
-    fix-permissions "/home/${NB_USER}"
-        
-    # Activate ipyparallel extension in the enviroment
-    # ipcluster nbextension enable && \
-    # Also activate ipywidgets extension for JupyterLab
-    # jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build && \
-    # jupyter labextension install jupyter-matplotlib@^0.10.* --no-build && \
-    # jupyter lab build --dev-build=False --minimize=False -y && \
-    # jupyter lab clean -y && \
-    # npm cache clean --force && \
-    # fix-permissions "${CONDA_DIR}" &&\
-    # rm -rf "/home/${NB_USER}/.cache/yarn" && \
-    # rm -rf "/home/${NB_USER}/.node-gyp" && \
-    # fix-permissions "/home/${NB_USER}"
+# RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build && \
+#     # jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
+#     # jupyter labextension install nbdime-jupyterlab --no-build && \
+#     # jupyter labextension install bqplot --no-build && \
+#     # jupyter labextension install @jupyterlab/vega3-extension --no-build && \
+#     # jupyter labextension install @jupyterlab/git --no-build && \
+#     # jupyter labextension install @jupyterlab/hub-extension --no-build && \
+#     # jupyter labextension install jupyterlab_tensorboard --no-build && \
+#     # jupyter labextension install jupyterlab-kernelspy --no-build && \
+#     # jupyter labextension install @jupyterlab/plotly-extension --no-build && \
+#     # jupyter labextension install jupyterlab-chart-editor --no-build && \
+#     # jupyter labextension install plotlywidget --no-build && \
+#     # jupyter labextension install @jupyterlab/latex --no-build && \
+#     # jupyter labextension install @jupyterlab/server-proxy &&\
+#     jupyter labextension install jupyter-matplotlib --no-build && \
+#     # jupyter labextension install jupyterlab-drawio --no-build && \
+#     # jupyter labextension install jupyter-leaflet --no-build && \
+#     # jupyter labextension install qgrid --no-build && \
+#     jupyter lab build && \
+#         jupyter lab clean && \
+#         jlpm cache clean && \
+#         npm cache clean --force && \
+#         rm -rf "/home/${NB_USER}/.cache/yarn" && \
+#         rm -rf "/home/${NB_USER}/.node-gyp" && \
+#     fix-permissions "/home/${NB_USER}"
 
 USER $NB_UID
 WORKDIR $HOME
-
-# # Change the configuration of ipyparallel
-# RUN sed -i  "/# Configuration file for jupyter-notebook./a c.NotebookApp.server_extensions.append('ipyparallel.nbextension')"  /home/jovyan/.jupyter/jupyter_notebook_config.py
 	
 # Create a folder for example
 RUN mkdir /home/$NB_USER/example && \
@@ -182,5 +159,3 @@ RUN mkdir /home/$NB_USER/example && \
 # Copy example data and scripts to the example folder
 COPY /example/HDDM_official_tutorial_reproduced.ipynb /home/${NB_USER}/example
 COPY /example/LAN_Tutorial_reproduced.ipynb /home/${NB_USER}/example
-#RUN ipcluster start -n 2
-#RUN ipython profile create --parallel --profile=myprofile
