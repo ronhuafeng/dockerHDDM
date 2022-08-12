@@ -88,7 +88,7 @@ RUN pip install --upgrade pip && \
 
 # install kabuki and hddm from Github
 RUN pip install --no-cache-dir git+https://github.com/hddm-devs/kabuki && \
-    pip install --no-cache-dir git+https://github.com/hddm-devs/hddm.git@3fe1b33c79cac9b3e9556290b5344decb5f56291 && \
+    pip install --no-cache-dir git+https://github.com/hddm-devs/hddm && \
     fix-permissions "/home/${NB_USER}"
 
 # Install pymc3 after install hddm to avoid compatibility issue.
