@@ -1,28 +1,29 @@
 # A HDDM docker image
 There a few different images, see hcp4715/hddm/tags.
 
-These two are tested and recommended:
+These three are currently used images:
 
-`hddm:0.9.7`: Python 3.8.8, the latest version of HDDM (0.9.7) with new functions, e.g., hddmnn, with [LAN tutorial](https://hddm.readthedocs.io/en/latest/lan_tutorial.html) and [HDDMnnRL tutorial](https://hddm.readthedocs.io/en/latest/demo_HDDMnnRL.html) within the example folder.
+`hddm:0.9.8`: Python 3.8.8, the latest version of [HDDM 0.9.8](https://hddm.readthedocs.io/en/latest/index.html). **No `example` folder inside yet**.
 
 `hddm:0.8`: Python 3.8.8, HDDM 0.8, and kabuki 0.6.4. This version is more stable with classic HDDM functions.
 
-These two are images generated during experimenting, I keep them in case that some one has used it before.
+`hddm:0.8_tutorial`: Python 3.8.8, HDDM 0.8, kabuki 0.6.4, and with functions bridging HDDM model results and `arviz`. This version is associated with our tutorial paper: [A Hitchhiker’s Guide to Bayesian Hierarchical Drift-Diffusion Modeling with dockerHDDM](https://psyarxiv.com/6uzga/) .
+
+These two are historical images, I keep them in case that some one has used it before.
 
 `hddm:arviz`: Python 3.7, HDDM 0.8, kabuki 0.6.4, and testing scripts that aimed at working with arviz.
 
-`hddm:tutorial_alpha`: Python 3.8.8, HDDM 0.8, and newer kabuki installed directly from github, also with testing scripts that aimed at working with arviz
+`hddm:tutorial_alpha`: Python 3.8.8, HDDM 0.8, and kabuki 0.6.4 installed directly from github, also with testing scripts that aimed at working with arviz
 
 ## What is HDDM? 
-HDDM is a python package for hierarchical drift diffusion modelling, see [here](https://hddm.readthedocs.io/en/latest/) for more.
+HDDM is a python package for hierarchical drift diffusion modelling, see [here](https://hddm.readthedocs.io/en/latest/index.html) for more.
 
 ## What's new about this docker image?
 This docker image was based on a previous HDDM docker image by Mads ([@madslupe](https://hub.docker.com/r/madslupe/hddm)), with a few improvements. 
 * Parallel processing with `p_tqdm` (`pathos` and `tqdm`). 
 * With the latest HDDM package.
 * A few new python packages that are used for plotting (`seaborn`, `plotly`).
-* Related packages for Bayesian inference (`Arviz`, `pymc3`, and `bambi`).
-* Include `pyddm`  as an altenative.
+* Related packages for Bayesian inference (`Arviz`).
 
 In the `example` folder of this docker image (see below on how to use this image), you can find jupyter notebooks. Most of them include a jupyter notebook that reproduce the [official tutorial](http://ski.clps.brown.edu/hddm_docs/tutorial.html).
 

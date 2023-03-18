@@ -3,4 +3,5 @@
 */*.ipynb_checkpoints/
 */*pycache*/
 */example/*chain*
+*/example/*csv
 *.vscode*/

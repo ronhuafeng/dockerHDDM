@@ -1,8 +1,8 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
 
-## The buid from the base of minimal-notebook, based on python 3.8.8
-## Modified by Dr. Hu Chuan-Peng, Nanjing Normal University, Nanjing, China.
+## This is a docker image built for research purpose
+## By Dr. Hu Chuan-Peng, Nanjing Normal University, Nanjing, China.
 
 ## In this version, jupyter lab and jupyter have higher version:
 # jupyterlab - 3.0.14
@@ -51,7 +51,8 @@ RUN conda install --quiet --yes \
     'matplotlib-base=3.5.*' \
     'numba=0.55.*' \
     'numexpr=2.7.*' \
-    'numpy=1.19.*' \
+    # changed to 1.22.4 for hddm 0.9.8
+    'numpy=1.22.4' \
     'pandas=1.0.5' \
     'patsy=0.5.*' \
     'protobuf=3.11.*' \
@@ -77,6 +78,9 @@ USER $NB_UID
 RUN pip install --upgrade pip && \
     # update pillow for compatibility
     pip install --no-cache-dir 'pillow==8.4' && \
+    # install these two for torch 1.7.0
+    pip install --no-cache-dir 'dataclasses' && \
+    pip install --no-cache-dir 'future==0.18.2' && \
     # install plotly and its chart studio extension
     pip install --no-cache-dir 'chart_studio==1.1.0' && \
     pip install --no-cache-dir 'plotly==4.14.3' && \
@@ -87,17 +91,18 @@ RUN pip install --upgrade pip && \
     fix-permissions "/home/${NB_USER}"
 
 # install kabuki and hddm from Github
-RUN pip install --no-cache-dir git+https://github.com/hddm-devs/kabuki && \
+RUN pip install --no-cache-dir git+https://github.com/AlexanderFengler/ssms@main  && \
+    pip install --no-cache-dir git+https://github.com/hddm-devs/kabuki && \
     pip install --no-cache-dir git+https://github.com/hddm-devs/hddm && \
     fix-permissions "/home/${NB_USER}"
 
-# Install pymc3 after install hddm to avoid compatibility issue.
-RUN pip install --no-cache-dir 'pymc3==3.11.*' && \
-    # can not use bambi 0.9 because it require pymc4
-    pip install --no-cache-dir 'bambi==0.8.*' && \
-    pip install --no-cache-dir 'paranoid-scientist' && \
-    pip install --no-cache-dir 'pyddm' && \
-    fix-permissions "/home/${NB_USER}"
+# Install pymc3 and bambi are not compitable with numpy 1.22.4, removed from this docker image
+# RUN pip install --no-cache-dir 'pymc3==3.11.*' && \
+#     # can not use bambi 0.9 because it require pymc4
+#     # pip install --no-cache-dir 'bambi==0.8.*' && \
+#     pip install --no-cache-dir 'paranoid-scientist' && \
+#     pip install --no-cache-dir 'pyddm' && \
+#     fix-permissions "/home/${NB_USER}"
 
 # Install PyTorch, CPU-only
 RUN conda install -c pytorch --quiet --yes \
@@ -115,47 +120,13 @@ ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"
 RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" &&\
      fix-permissions "/home/${NB_USER}"
 
-## Activate ipywidgets extension
-    # Activate ipywidgets extension in the environment that runs the notebook server
-# USER $NB_UID
-
-# Check compatibilities of jupyterlab-manager:
-# https://npm.io/package/@jupyter-widgets/jupyterlab-manager
-# # compatibility with bokeh: https://www.npmjs.com/package/@bokeh/jupyter_bokeh
-# # compatibility with matplotlib: https://www.npmjs.com/package/jupyter-matplotlib
-# RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build && \
-#     # jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
-#     # jupyter labextension install nbdime-jupyterlab --no-build && \
-#     # jupyter labextension install bqplot --no-build && \
-#     # jupyter labextension install @jupyterlab/vega3-extension --no-build && \
-#     # jupyter labextension install @jupyterlab/git --no-build && \
-#     # jupyter labextension install @jupyterlab/hub-extension --no-build && \
-#     # jupyter labextension install jupyterlab_tensorboard --no-build && \
-#     # jupyter labextension install jupyterlab-kernelspy --no-build && \
-#     # jupyter labextension install @jupyterlab/plotly-extension --no-build && \
-#     # jupyter labextension install jupyterlab-chart-editor --no-build && \
-#     # jupyter labextension install plotlywidget --no-build && \
-#     # jupyter labextension install @jupyterlab/latex --no-build && \
-#     # jupyter labextension install @jupyterlab/server-proxy &&\
-#     jupyter labextension install jupyter-matplotlib --no-build && \
-#     # jupyter labextension install jupyterlab-drawio --no-build && \
-#     # jupyter labextension install jupyter-leaflet --no-build && \
-#     # jupyter labextension install qgrid --no-build && \
-#     jupyter lab build && \
-#         jupyter lab clean && \
-#         jlpm cache clean && \
-#         npm cache clean --force && \
-#         rm -rf "/home/${NB_USER}/.cache/yarn" && \
-#         rm -rf "/home/${NB_USER}/.node-gyp" && \
-#     fix-permissions "/home/${NB_USER}"
-
 USER $NB_UID
 WORKDIR $HOME
 	
-# Create a folder for example
-RUN mkdir /home/$NB_USER/example && \
-   fix-permissions /home/$NB_USER
+# # Create a folder for example
+# RUN mkdir /home/$NB_USER/example && \
+#    fix-permissions /home/$NB_USER
 
-# Copy example data and scripts to the example folder
-COPY /example/HDDM_official_tutorial_reproduced.ipynb /home/${NB_USER}/example
-COPY /example/LAN_Tutorial_reproduced.ipynb /home/${NB_USER}/example
+# # Copy example data and scripts to the example folder
+# COPY /example/HDDM_official_tutorial_reproduced.ipynb /home/${NB_USER}/example
+# COPY /example/LAN_Tutorial_reproduced.ipynb /home/${NB_USER}/example
