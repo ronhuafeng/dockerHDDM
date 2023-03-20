@@ -3,7 +3,7 @@ There a few different images, see hcp4715/hddm/tags.
 
 These three are currently used images:
 
-`hddm:0.9.8`: Python 3.8.8, the latest version of [HDDM 0.9.8](https://hddm.readthedocs.io/en/latest/index.html). **No `example` folder inside yet**.
+`hddm:0.9.8`: Python 3.8.8, the latest version of [HDDM 0.9.8](https://hddm.readthedocs.io/en/latest/index.html). **No `example` folder inside this image yet**.
 
 `hddm:0.8`: Python 3.8.8, HDDM 0.8, and kabuki 0.6.4. This version is more stable with classic HDDM functions.
 
