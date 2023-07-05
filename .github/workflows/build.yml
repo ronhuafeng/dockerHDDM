@@ -1,0 +1,35 @@
+name: Build and Push Docker Image
+
+on:
+    push:
+      branches: [ master ]
+    pull_request:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+    #   - name: Login to Docker Hub
+    #     uses: docker/login-action@v1
+    #     with:
+    #       username: ${{ secrets.DOCKER_USERNAME }}
+    #       password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # - name: Build and push Docker image for x86_64
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: .
+      #     file: ./Dockerfile
+      #     push: false
+      #     tags: hcp4715/hddm:latest
+      
+      - name: Build and push Docker image for aarch64
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile.aarch64
+          push: false
+          tags: hcp4715/hddm:aarch64-latest
