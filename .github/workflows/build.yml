@@ -25,11 +25,19 @@ jobs:
       #     file: ./Dockerfile
       #     push: false
       #     tags: hcp4715/hddm:latest
-      
-      - name: Build and push Docker image for aarch64
-        uses: docker/build-push-action@v2
+      - uses: uraimo/run-on-arch-action@v2
+        name: Build artifact
+        id: build
         with:
-          context: .
-          file: ./Dockerfile.aarch64
-          push: false
-          tags: hcp4715/hddm:aarch64-latest
+          arch: aarch64
+          distro: ubuntu-22.04
+          run: |
+            docker build -t hcp4715/hddm:aarch64-latest -f Dockerfile.aarch64 .
+
+      # - name: Build and push Docker image for aarch64
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: .
+      #     file: ./Dockerfile.aarch64
+      #     push: false
+      #     tags: hcp4715/hddm:aarch64-latest
