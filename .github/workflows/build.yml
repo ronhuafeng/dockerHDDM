@@ -30,7 +30,7 @@ jobs:
         id: build
         with:
           arch: aarch64
-          distro: ubuntu-22.04
+          distro: ubuntu22.04
           run: |
             docker build -t hcp4715/hddm:aarch64-latest -f Dockerfile.aarch64 .
 
