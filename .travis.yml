@@ -7,5 +7,5 @@ services:
 #   - docker build -t my_image_name . -f Dockerfile.aarch64
 
 script:
-  - docker build -t my_image_name . -f Dockerfile.aarch64
+  - docker build -t my_image_name . -f Dockerfile.aarch64 
   # - docker run my_image_name some_test_script.sh 
