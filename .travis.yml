@@ -4,7 +4,7 @@ services:
   - docker
 
 before_install:
-  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 991BC93C
+  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 871920D1991BC93C
 
 # before_install:
 #   - docker build -t my_image_name . -f Dockerfile.aarch64
