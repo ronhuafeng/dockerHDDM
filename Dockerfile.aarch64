@@ -5,9 +5,9 @@ LABEL authors="Hu Chuan-Peng <hcp4715@hotmail.com>,bef0rewind <ron.huafeng@gmail
 USER root
 
 RUN sudo apt-get update
-RUN apt-get install -y --no-install-recommends apt-utils && \
-    apt-get install -y --no-install-recommends ffmpeg dvipng && \
-    apt-get install -y \
+RUN sudo apt-get install -y --no-install-recommends apt-utils && \
+    sudo apt-get install -y --no-install-recommends ffmpeg dvipng && \
+    sudo apt-get install -y \
     libatlas-base-dev \
     gcc g++ gfortran zlib1g zlib1g-dev libnuma-dev m4 bzip2 wget flex libfl-dev bison python3 python3-dev cmake libblas-dev liblapack-dev r-base libboost-all-dev libopenblas-dev libxml2-dev \
     doxygen libnlopt-dev libtbb-dev libmuparser-dev swig libceres-dev libcminpack-dev libgflags-dev python3-numpy python3-scipy python3-matplotlib \
@@ -15,10 +15,10 @@ RUN apt-get install -y --no-install-recommends apt-utils && \
     libopenblas-dev \
     liblapack-dev \
     build-essential cmake \
-    curl gnupg sudo git qemu-user \
+    curl gnupg git qemu-user \
     libc6 libstdc++6 bison flex liblapack-dev libnlopt-dev libdlib-dev libboost-math-dev libxml2-dev libcminpack-dev libprimesieve-dev libnlopt-cxx-dev libceres-dev libmpfr-dev libmpc-dev libgoogle-glog-dev libgflags-dev libmetis-dev libeigen3-dev libpng-dev libsqlite3-dev libjpeg-dev swig \
     libexpat1-dev zlib1g-dev python3-distutils libjs-sphinxdoc libbz2-1.0 libdb5.3 libncursesw6 libreadline8 libuuid1 && \
-    rm -rf /var/lib/apt/lists/*
+    sudo rm -rf /var/lib/apt/lists/*
 
 USER $NB_UID
 
