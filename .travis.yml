@@ -1,4 +1,5 @@
 arch: arm64 # use Arm64 environment
+dist: jammy
 
 services:
   - docker
