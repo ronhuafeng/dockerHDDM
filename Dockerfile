@@ -21,7 +21,7 @@ LABEL authors="Hu Chuan-Peng <hcp4715@hotmail.com>,bef0rewind <ron.huafeng@gmail
 #     libexpat1-dev zlib1g-dev python3-distutils libjs-sphinxdoc libbz2-1.0 libdb5.3 libncursesw6 libreadline8 libuuid1 && \
 #     sudo rm -rf /var/lib/apt/lists/*
 
-USER $NB_UID
+# USER $NB_UID
 
 # ENV MAKEFLAGS -j8
 # RUN git clone https://github.com/openturns/openturns.git && \
@@ -34,7 +34,7 @@ USER $NB_UID
 #     make clean
 
 # Install kabuki and hddm from Github
-RUN pip install numpy==1.22.2 && pip install --no-cache-dir git+https://github.com/ronhuafeng/pymc2@master && \
-    pip install --no-cache-dir git+https://github.com//ronhuafeng/kabuki@master && \
+RUN pip install numpy==1.22.2 && pip install --no-cache-dir git+https://github.com/ronhuafeng/pymc2@master
+RUN pip install --no-cache-dir git+https://github.com//ronhuafeng/kabuki@master && \
     pip install --no-cache-dir git+https://github.com/hddm-devs/hddm && \
     fix-permissions "/home/${NB_USER}"
