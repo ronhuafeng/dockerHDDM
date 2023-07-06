@@ -3,7 +3,6 @@ FROM $BASE_CONTAINER
 
 LABEL authors="Hu Chuan-Peng <hcp4715@hotmail.com>,bef0rewind <ron.huafeng@gmail.com>"
 
-# USER root
 
 # RUN sudo apt-get update && \
 #     sudo apt-get install -y --no-install-recommends apt-utils && \
@@ -21,7 +20,6 @@ LABEL authors="Hu Chuan-Peng <hcp4715@hotmail.com>,bef0rewind <ron.huafeng@gmail
 #     libexpat1-dev zlib1g-dev python3-distutils libjs-sphinxdoc libbz2-1.0 libdb5.3 libncursesw6 libreadline8 libuuid1 && \
 #     sudo rm -rf /var/lib/apt/lists/*
 
-# USER $NB_UID
 
 # ENV MAKEFLAGS -j8
 # RUN git clone https://github.com/openturns/openturns.git && \
@@ -34,6 +32,7 @@ LABEL authors="Hu Chuan-Peng <hcp4715@hotmail.com>,bef0rewind <ron.huafeng@gmail
 #     make clean
 
 # Install the required packages for pymc2
+USER root
 RUN apt-get update && apt-get install -y \
     gcc \
     libatlas-dev \
@@ -41,6 +40,7 @@ RUN apt-get update && apt-get install -y \
     liblapack-dev \
     gfortran && \
     rm -rf /var/lib/apt/lists/*
+USER $NB_UID
 
 RUN pip install numpy==1.22.2 && pip install --no-cache-dir git+https://github.com/ronhuafeng/pymc2@master
 
