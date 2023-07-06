@@ -4,8 +4,8 @@ LABEL authors="Hu Chuan-Peng <hcp4715@hotmail.com>,bef0rewind <ron.huafeng@gmail
 
 # USER root
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends apt-utils && \
+RUN sudo apt-get update
+RUN apt-get install -y --no-install-recommends apt-utils && \
     apt-get install -y --no-install-recommends ffmpeg dvipng && \
     apt-get install -y \
     libatlas-base-dev \
