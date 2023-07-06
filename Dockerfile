@@ -33,8 +33,21 @@ LABEL authors="Hu Chuan-Peng <hcp4715@hotmail.com>,bef0rewind <ron.huafeng@gmail
 #     make install && \
 #     make clean
 
-# Install kabuki and hddm from Github
+# Install the required packages for pymc2
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libatlas-dev \
+    libatlas-base-dev \
+    liblapack-dev \
+    gfortran && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN pip install numpy==1.22.2 && pip install --no-cache-dir git+https://github.com/ronhuafeng/pymc2@master
+
+
+
+
+# 
 RUN pip install --no-cache-dir git+https://github.com//ronhuafeng/kabuki@master && \
     pip install --no-cache-dir git+https://github.com/hddm-devs/hddm && \
     fix-permissions "/home/${NB_USER}"
