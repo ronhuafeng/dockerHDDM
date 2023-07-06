@@ -3,6 +3,12 @@ arch: arm64 # use Arm64 environment
 services:
   - docker
 
+addons:
+  apt:
+    update: true
+    packages:
+    - gnupg
+
 # before_install:
 #   - docker build -t my_image_name . -f Dockerfile.aarch64
 
