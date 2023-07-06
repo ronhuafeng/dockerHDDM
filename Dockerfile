@@ -35,6 +35,8 @@ LABEL authors="Hu Chuan-Peng <hcp4715@hotmail.com>,bef0rewind <ron.huafeng@gmail
 USER root
 RUN apt-get update && apt-get install -y \
     gcc \
+    # for hddm we need g++
+    g++ \ 
     libatlas-base-dev \
     liblapack-dev \
     gfortran && \
