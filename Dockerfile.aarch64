@@ -4,8 +4,7 @@ LABEL authors="Hu Chuan-Peng <hcp4715@hotmail.com>,bef0rewind <ron.huafeng@gmail
 
 # USER root
 
-RUN chmod +r /etc/apt/trusted.gpg.d/ubuntu-keyring-2012-cdimage.gpg && \
-    apt-get update && \
+RUN apt-get update && \
     apt-get install -y --no-install-recommends apt-utils && \
     apt-get install -y --no-install-recommends ffmpeg dvipng && \
     apt-get install -y \
