@@ -2,9 +2,9 @@ FROM jupyter/minimal-notebook:aarch64-python-3.8
 
 LABEL authors="Hu Chuan-Peng <hcp4715@hotmail.com>,bef0rewind <ron.huafeng@gmail.com>"
 
-USER root
+# USER root
 
-RUN sudo chmod +r /etc/apt/trusted.gpg.d/ubuntu-keyring-2012-cdimage.gpg && \
+RUN chmod +r /etc/apt/trusted.gpg.d/ubuntu-keyring-2012-cdimage.gpg && \
     apt-get update && \
     apt-get install -y --no-install-recommends apt-utils && \
     apt-get install -y --no-install-recommends ffmpeg dvipng && \
