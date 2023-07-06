@@ -2,7 +2,7 @@ FROM jupyter/minimal-notebook:aarch64-python-3.8
 
 LABEL authors="Hu Chuan-Peng <hcp4715@hotmail.com>,bef0rewind <ron.huafeng@gmail.com>"
 
-# USER root
+USER root
 
 RUN sudo apt-get update
 RUN apt-get install -y --no-install-recommends apt-utils && \
